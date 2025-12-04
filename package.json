@@ -1,0 +1,41 @@
+{
+  "name": "ticket-system",
+  "version": "1.0.0",
+  "description": "Lightweight Express/Tailwind ticket desk with optional SQLite backend and email notifications.",
+  "main": "server.js",
+  "scripts": {
+    "test": "node -e \"console.log('No automated tests yet');\"",
+    "start": "node server.js",
+    "build:css": "tailwindcss -i ./styles/tailwind.css -o ./assets/tailwind.css --minify",
+    "migrate:sqlite": "node scripts/migrate-json-to-sqlite.js"
+  },
+  "keywords": [
+    "tickets",
+    "helpdesk",
+    "express",
+    "sqlite",
+    "tailwindcss"
+  ],
+  "author": "Notic OS contributors",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.13.0",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-session": "^1.17.3",
+    "isomorphic-fetch": "^3.0.0",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.10",
+    "better-sqlite3": "^11.8.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.18"
+  }
+}
