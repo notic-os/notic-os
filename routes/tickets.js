@@ -5,6 +5,7 @@ const { sendTicketEmail } = require("../lib/email.js");
 const { findEmailByName } = require("../lib/users.js");
 const path = require("path");
 const fs = require("fs");
+const Settings = require("../lib/settingsStore.js");
 
 const router = express.Router();
 const MAX_ATTACHMENT_BYTES = 35 * 1024 * 1024; // 35MB
@@ -43,10 +44,13 @@ router.post("/submit", maybeUploadSingle("attachment"), async (req, res) => {
 
     const emailLookup = findEmailByName(name);
 
-    const id = "NTC-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const settings = Settings.load();
+    const rawPrefix = (settings.ticketPrefix || "NTC").toString().trim();
+    const safePrefix = rawPrefix.replace(/[^a-zA-Z0-9]/g, "").toUpperCase() || "NTC";
+    const id = `${safePrefix}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     const createdAt = new Date();
-    const slaHours = Number(process.env.SLA_HOURS || 24) || 24;
+    const slaHours = Number(settings.slaHours || process.env.SLA_HOURS || 24) || 24;
     const slaMinutes = slaHours * 60;
     const dueAt = new Date(createdAt.getTime() + slaMinutes * 60 * 1000);
 

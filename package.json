@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "node -e \"console.log('No automated tests yet');\"",
-    "start": "node server.js",
+    "start": "npm run build:css && node server.js",
     "build:css": "tailwindcss -i ./styles/tailwind.css -o ./assets/tailwind.css --minify",
     "migrate:sqlite": "node scripts/migrate-json-to-sqlite.js"
   },

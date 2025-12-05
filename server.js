@@ -6,6 +6,8 @@ const cors = require("cors");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const Tickets = require("./lib/ticketStore.js");
+const Settings = require("./lib/settingsStore.js");
+const { getThemeClass, getThemeStyles } = require("./lib/theme.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,21 +46,41 @@ function requireLogin(req, res, next) {
 
 app.get("/login", (req, res) => {
   const error = req.query.error ? decodeURIComponent(req.query.error) : "";
+  const settings = Settings.load();
+  const themeClass = getThemeClass(settings.theme);
+  const themeStyles = getThemeStyles(settings.theme);
+  const cardClass =
+    settings.theme === "light"
+      ? "bg-white text-gray-900 border-gray-200"
+      : "bg-slate-950 text-slate-100 border-slate-800 shadow-sky-900/30";
+  const inputClass =
+    settings.theme === "light"
+      ? "border border-gray-300 p-2 rounded w-full mb-3"
+      : "border border-slate-700 bg-slate-900 text-slate-100 p-2 rounded w-full mb-3";
+  const buttonClass =
+    settings.theme === "light"
+      ? "w-full bg-[#0F6CBD] text-white py-2 rounded font-medium"
+      : "w-full bg-sky-600 hover:bg-sky-500 text-white py-2 rounded font-medium";
+  const logoBlock = settings.loginLogo
+    ? `<div class="flex justify-center mb-4"><img src="${settings.loginLogo}" alt="Admin logo" style="max-width:200px;max-height:200px;height:auto;width:auto;" class="rounded-md shadow"/></div>`
+    : "";
   res.send(`
     <html>
     <head>
       <title>Admin Login</title>
       <link href="/assets/tailwind.css" rel="stylesheet" />
+      ${themeStyles}
     </head>
-    <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
-      <form method="POST" action="/login" class="bg-white shadow rounded-xl p-6 w-full max-w-sm border">
-        <h1 class="text-xl font-semibold text-gray-800 mb-4">Admin Login</h1>
-        ${error ? `<div class=\"mb-3 text-sm text-red-600\">${error}</div>` : ""}
-        <label class="block text-sm font-medium text-gray-700">Username</label>
-        <input name="username" class="border p-2 rounded w-full mb-3" required />
-        <label class="block text-sm font-medium text-gray-700">Password</label>
-        <input name="password" type="password" class="border p-2 rounded w-full mb-4" required />
-        <button class="w-full bg-[#0F6CBD] text-white py-2 rounded font-medium">Sign in</button>
+    <body class="${themeClass} ${settings.theme === "light" ? "bg-gray-100 text-gray-900" : "bg-slate-950 text-slate-100"} min-h-screen flex items-center justify-center p-6">
+      <form method="POST" action="/login" class="${cardClass} shadow rounded-xl p-6 w-full max-w-sm border">
+        ${logoBlock}
+        <h1 class="text-xl font-semibold mb-4">${settings.theme === "light" ? "Admin Login" : "Admin Login"}</h1>
+        ${error ? `<div class=\"mb-3 text-sm text-red-500\">${error}</div>` : ""}
+        <label class="block text-sm font-medium ${settings.theme === "light" ? "text-gray-700" : "text-slate-200"}">Username</label>
+        <input name="username" class="${inputClass}" required />
+        <label class="block text-sm font-medium ${settings.theme === "light" ? "text-gray-700" : "text-slate-200"}">Password</label>
+        <input name="password" type="password" class="${inputClass.replace("mb-3", "mb-4")}" required />
+        <button class="${buttonClass}">Sign in</button>
       </form>
     </body>
     </html>

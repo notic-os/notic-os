@@ -1,7 +1,7 @@
 # Security Policy
 
 ## Reporting a vulnerability
-- Email security@example.com (update this to your project's security contact). Please include a description, steps to reproduce, and any logs you can share.
+- Email notic-os@outlook.com (update this to your project's security contact). Please include a description, steps to reproduce, and any logs you can share.
 - Do not open public issues for security reports. We aim to acknowledge within 3 business days.
 
 ## Hardening tips
