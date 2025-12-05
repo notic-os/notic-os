@@ -161,11 +161,11 @@ app.get("/healthz", async (req, res) => {
 app.use("/", require("./routes/tickets"));
 app.use("/admin", requireLogin, require("./routes/admin"));
 
-const pollMailbox = require("./jobs/pollMail.js");
+//const pollMailbox = require("./jobs/pollMail.js");
 
-setInterval(() => {
-  pollMailbox();
-}, 60 * 1000); // every 60 sec
+//setInterval(() => {
+//  pollMailbox();
+//}, 60 * 1000); // every 60 sec
 
 app.listen(PORT, "0.0.0.0", () => {
   const base = process.env.BASE_URL || `http://localhost:${PORT}`;
